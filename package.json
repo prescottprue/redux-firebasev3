@@ -9,7 +9,7 @@
     "watch": "npm run build -- --watch",
     "clean": "rimraf build",
     "prepublish": "npm run clean && npm run build",
-    "lint": "eslint ./source",
+    "lint": "eslint source/**",
     "lint:fix": "npm run lint -- --fix",
     "test": "mocha -R spec --compilers js:babel-core/register ./test/setup.js ./test/**/*.spec.js",
     "test:cov": "babel-node $(npm bin)/isparta cover --report lcov ./node_modules/mocha/bin/_mocha -- ./test/** --recursive",
