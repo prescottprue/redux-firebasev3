@@ -30,8 +30,7 @@ export default (config) => {
       writable: true,
       enumerable: true,
       configurable: true
-    });
-
+    })
 
     const set = (path, value, onComplete) => ref.child(path).set(value, onComplete)
     const push = (path, value, onComplete) => ref.child(path).push(value, onComplete)

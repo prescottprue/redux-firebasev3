@@ -228,13 +228,10 @@ const watchUserProfile = (dispatch, firebase) => {
   }
 }
 
-export const login = (dispatch, firebase, credentials) => {
-  return new Promise((resolve, reject) => {
-    dispatchLoginError(dispatch, null)
-
-    const {email, password} = credentials
-    firebase.auth().signInWithEmailAndPassword(email, password).then(resolve).catch(reject);
-  })
+export const login = (dispatch, firebase, {email, password}) => {
+  dispatchLoginError(dispatch, null)
+  return firebase.auth()
+    .signInWithEmailAndPassword(email, password)
 }
 
 export const init = (dispatch, firebase) => {
@@ -262,18 +259,16 @@ export const logout = (dispatch, firebase) => {
 export const createUser = (dispatch, firebase, { email, password }, profile) =>
   new Promise((resolve, reject) => {
     dispatchLoginError(dispatch, null)
-    console.log('calling firebase auth create user:', { email, password })
     if (!email || !password) {
       dispatchLoginError(dispatch, new Error('Email and Password are required to create user'))
       return reject('Email and Password are Required')
     }
-    console.log('firebase auth obj:', firebase.auth())
     firebase.auth()
     .createUserWithEmailAndPassword(email, password)
     .then((userData) => {
-      // if (profile && firebase._.config.userProfile) {
-      //   firebase.database().ref().child(`${firebase._.config.userProfile}/${userData.uid}`).set(profile)
-      // }
+      if (profile && firebase._.config.userProfile) {
+        firebase.database().ref().child(`${firebase._.config.userProfile}/${userData.uid}`).set(profile)
+      }
       login(dispatch, firebase, { email, password })
         .then(() => resolve(userData.uid))
         .catch(err => reject(err))
@@ -297,7 +292,7 @@ export const resetPassword = (dispatch, firebase, email) => {
       }
       return
     }
-  });
+  })
 }
 
 export default { watchEvents, unWatchEvents, init, logout, createUser, resetPassword }
