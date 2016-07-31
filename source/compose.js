@@ -14,7 +14,7 @@ export default (config) => {
     try {
       Firebase.initializeApp(config)
     } catch (err) {
-      console.warn('Firebase error:', err)
+      // console.warn('Firebase error:', err)
     }
 
     const ref = Firebase.database().ref()
