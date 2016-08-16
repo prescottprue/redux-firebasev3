@@ -248,44 +248,30 @@ const watchUserProfile = (dispatch, firebase) => {
   }
 }
 
-export const login = (dispatch, firebase,  credentials) => {
-  return new Promise( (resolve, reject) => {
-    const {ref} = firebase
+export const login = (dispatch, firebase, credentials) => {
+  dispatchLoginError(dispatch, null);
+  const {token, provider, type, email, password} = credentials;
 
-    dispatchLoginError(dispatch, null)
-
-    const handler = (err, authData) => {
-      if(err){
-        dispatchLoginError(dispatch, err)
-        return reject(err)
-      }
-      resolve(authData)
-    }
-
-    const {token, provider, type} = credentials
-
-
-    if(provider) {
-
-      if(credentials.token) {
-        return ref.authWithOAuthToken( provider, token, handler )
-      }
-
-      const  auth = (type === 'popup') ?
-          ref.authWithOAuthPopup
-          : ref.authWithOAuthRedirect
-
-      return auth(provider, handler)
-
-    }
+  if(provider) {
 
     if(token) {
-      return ref.authWithCustomToken(token, handler)
+      return firebase.auth().signInWithCredential( provider, token)
     }
 
-    ref.authWithPassword(credentials, handler)
-  })
-}
+    const  auth = (type === 'popup') ?
+        firebase.auth().signInWithPopup
+        : firebase.auth().signInWithRedirect;
+
+    return auth(provider)
+
+  }
+
+  if(token) {
+    return firebase.auth().signInWithCustomToken(token)
+  }
+
+  return firebase.auth().signInWithEmailAndPassword(email, password)
+};
 
 export const init = (dispatch, firebase) => {
   firebase.auth().onAuthStateChanged(authData => {
