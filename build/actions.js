@@ -261,12 +261,43 @@ var watchUserProfile = function watchUserProfile(dispatch, firebase) {
   }
 };
 
-var login = exports.login = function login(dispatch, firebase, _ref) {
-  var email = _ref.email;
-  var password = _ref.password;
+var login = exports.login = function login(dispatch, firebase, credentials) {
+  return new _es6Promise.Promise(function (resolve, reject) {
+    var ref = firebase.ref;
 
-  dispatchLoginError(dispatch, null);
-  return firebase.auth().signInWithEmailAndPassword(email, password);
+
+    dispatchLoginError(dispatch, null);
+
+    var handler = function handler(err, authData) {
+      if (err) {
+        dispatchLoginError(dispatch, err);
+        return reject(err);
+      }
+      resolve(authData);
+    };
+
+    var token = credentials.token;
+    var provider = credentials.provider;
+    var type = credentials.type;
+
+
+    if (provider) {
+
+      if (credentials.token) {
+        return ref.authWithOAuthToken(provider, token, handler);
+      }
+
+      var auth = type === 'popup' ? ref.authWithOAuthPopup : ref.authWithOAuthRedirect;
+
+      return auth(provider, handler);
+    }
+
+    if (token) {
+      return ref.authWithCustomToken(token, handler);
+    }
+
+    ref.authWithPassword(credentials, handler);
+  });
 };
 
 var init = exports.init = function init(dispatch, firebase) {
@@ -291,9 +322,9 @@ var logout = exports.logout = function logout(dispatch, firebase) {
   unWatchUserProfile(firebase);
 };
 
-var createUser = exports.createUser = function createUser(dispatch, firebase, _ref2, profile) {
-  var email = _ref2.email;
-  var password = _ref2.password;
+var createUser = exports.createUser = function createUser(dispatch, firebase, _ref, profile) {
+  var email = _ref.email;
+  var password = _ref.password;
   return new _es6Promise.Promise(function (resolve, reject) {
     dispatchLoginError(dispatch, null);
     if (!email || !password) {
