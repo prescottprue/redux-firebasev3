@@ -249,28 +249,39 @@ const watchUserProfile = (dispatch, firebase) => {
 }
 
 export const login = (dispatch, firebase, credentials) => {
-  dispatchLoginError(dispatch, null);
-  const {token, provider, type, email, password} = credentials;
+  return new Promise( (resolve, reject) => {
+    dispatchLoginError(dispatch, null);
 
-  if(provider) {
+    const handler = (err, authData) => {
+      if(err){
+        dispatchLoginError(dispatch, err)
+        return reject(err)
+      }
+      resolve(authData)
+    };
 
-    if(token) {
-      return firebase.auth().signInWithCredential( provider, token)
+    const {token, provider, type, email, password} = credentials;
+
+    if(provider) {
+
+      if(token) {
+        return firebase.auth().signInWithCredential( provider, token)
+      }
+
+      const  auth = (type === 'popup') ?
+          firebase.auth().signInWithPopup
+          : firebase.auth().signInWithRedirect;
+
+      return auth(provider)
+
     }
 
-    const  auth = (type === 'popup') ?
-        firebase.auth().signInWithPopup
-        : firebase.auth().signInWithRedirect;
+    if(token) {
+      return firebase.auth().signInWithCustomToken(token)
+    }
 
-    return auth(provider)
-
-  }
-
-  if(token) {
-    return firebase.auth().signInWithCustomToken(token)
-  }
-
-  return firebase.auth().signInWithEmailAndPassword(email, password)
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+  })
 };
 
 export const init = (dispatch, firebase) => {

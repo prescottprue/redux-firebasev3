@@ -262,30 +262,41 @@ var watchUserProfile = function watchUserProfile(dispatch, firebase) {
 };
 
 var login = exports.login = function login(dispatch, firebase, credentials) {
-  dispatchLoginError(dispatch, null);
-  var token = credentials.token;
-  var provider = credentials.provider;
-  var type = credentials.type;
-  var email = credentials.email;
-  var password = credentials.password;
+  return new _es6Promise.Promise(function (resolve, reject) {
+    dispatchLoginError(dispatch, null);
+
+    var handler = function handler(err, authData) {
+      if (err) {
+        dispatchLoginError(dispatch, err);
+        return reject(err);
+      }
+      resolve(authData);
+    };
+
+    var token = credentials.token;
+    var provider = credentials.provider;
+    var type = credentials.type;
+    var email = credentials.email;
+    var password = credentials.password;
 
 
-  if (provider) {
+    if (provider) {
 
-    if (token) {
-      return firebase.auth().signInWithCredential(provider, token);
+      if (token) {
+        return firebase.auth().signInWithCredential(provider, token);
+      }
+
+      var auth = type === 'popup' ? firebase.auth().signInWithPopup : firebase.auth().signInWithRedirect;
+
+      return auth(provider);
     }
 
-    var auth = type === 'popup' ? firebase.auth().signInWithPopup : firebase.auth().signInWithRedirect;
+    if (token) {
+      return firebase.auth().signInWithCustomToken(token);
+    }
 
-    return auth(provider);
-  }
-
-  if (token) {
-    return firebase.auth().signInWithCustomToken(token);
-  }
-
-  return firebase.auth().signInWithEmailAndPassword(email, password);
+    return firebase.auth().signInWithEmailAndPassword(email, password);
+  });
 };
 
 var init = exports.init = function init(dispatch, firebase) {
