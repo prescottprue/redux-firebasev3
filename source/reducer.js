@@ -28,7 +28,7 @@ export default (state = initialState, action = {}) => {
   switch (action.type) {
 
     case START:
-      const {requesting, requested} = action
+      var {requesting, requested} = action;
       pathArr = pathToArr(path)
 
       retVal = (requesting !== undefined) ?
@@ -42,7 +42,7 @@ export default (state = initialState, action = {}) => {
       return retVal;
       
     case SET:
-      const {data, snapshot, timestamp, requesting, requested, rootPath} = action
+      var {data, snapshot, timestamp, requesting, requested, rootPath} = action;
       pathArr = pathToArr(path)
       let rootPathArr = pathToArr(rootPath)
 
@@ -69,7 +69,7 @@ export default (state = initialState, action = {}) => {
       return retVal;
 
     case NO_VALUE:
-      const {timestamp, requesting, requested} = action
+      var {timestamp, requesting, requested} = action
       pathArr = pathToArr(path)
       retVal = state.setIn(['data', ...pathArr], fromJS({}))
       retVal = retVal.setIn(['snapshot', ...pathArr], fromJS({}))
