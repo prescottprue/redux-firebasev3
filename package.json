@@ -1,6 +1,6 @@
 {
   "name": "redux-firebasev3",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Use Firebase version 3 with React and Redux in ES6",
   "main": "build/index.js",
   "jsnext:main": "source/index.js",
