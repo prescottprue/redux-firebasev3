@@ -134,7 +134,7 @@ exports.default = function () {
         value: function componentWillUnmount() {
           var firebase = this.context.store.firebase;
 
-          (0, _actions.unWatchEvents)(firebase, this._firebaseEvents);
+          (0, _actions.unWatchEvents)(firebase, dispatch, this._firebaseEvents);
         }
       }, {
         key: 'render',

@@ -207,8 +207,8 @@ export const unWatchEvent = (firebase, dispatch, event, path, queryId = undefine
 export const watchEvents = (firebase, dispatch, events) =>
     events.forEach(event => watchEvent(firebase, dispatch, event.name, event.path))
 
-export const unWatchEvents = (firebase, events) =>
-    events.forEach(event => unWatchEvent(firebase, event.name, event.path))
+export const unWatchEvents = (firebase, dispatch, events) =>
+    events.forEach(event => unWatchEvent(firebase, dispatch, event.name, event.path))
 
 const dispatchLoginError = (dispatch, authError) =>
     dispatch({
