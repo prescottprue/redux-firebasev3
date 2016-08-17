@@ -89,7 +89,8 @@ exports.default = function () {
     case _constants.INIT_BY_PATH:
       pathArr = pathToArr(path);
       retVal = state.deleteIn(['data'].concat(_toConsumableArray(pathArr)));
-      retVal = retVal.deleteIn(['snapshot'].concat(_toConsumableArray(pathArr)));
+      //keep the prev snapshot until it will override by the new one
+      //retVal = retVal.deleteIn(['snapshot', ...pathArr])
       retVal = retVal.deleteIn(['timestamp'].concat(_toConsumableArray(pathArr)));
       retVal = retVal.deleteIn(['requesting'].concat(_toConsumableArray(pathArr)));
       retVal = retVal.deleteIn(['requested'].concat(_toConsumableArray(pathArr)));

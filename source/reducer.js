@@ -91,7 +91,8 @@ export default (state = initialState, action = {}) => {
     case INIT_BY_PATH:
       pathArr = pathToArr(path)
       retVal = state.deleteIn(['data', ...pathArr])
-      retVal = retVal.deleteIn(['snapshot', ...pathArr])
+      //keep the prev snapshot until it will override by the new one
+      //retVal = retVal.deleteIn(['snapshot', ...pathArr])
       retVal = retVal.deleteIn(['timestamp', ...pathArr])
       retVal = retVal.deleteIn(['requesting', ...pathArr])
       retVal = retVal.deleteIn(['requested', ...pathArr])
