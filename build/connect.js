@@ -149,9 +149,7 @@ exports.default = function () {
     }(_react2.default.Component);
 
     FirebaseConnect.contextTypes = {
-      store: function store() {
-        return _react.PropTypes.object.isRequired;
-      }
+      store: _react.PropTypes.object.isRequired
     };
     return FirebaseConnect;
   };
