@@ -33,7 +33,6 @@ const getWatcherCount = (firebase, event, path, queryId = undefined) => {
 }
 
 const getQueryIdFromPath = (path) => {
-  const origPath = path
   let pathSplitted = path.split('#')
   path = pathSplitted[0]
 
@@ -47,12 +46,11 @@ const getQueryIdFromPath = (path) => {
   }).filter(q => q) : undefined
 
   return (queryId && queryId.length > 0)
-    ? queryId[0]
-    : ((isQuery) ? origPath : undefined)
+    ? queryId[0] : undefined
 }
 
 const unsetWatcher = (firebase, event, path, queryId = undefined) => {
-  let id = queryId || getQueryIdFromPath(path)
+  let id = (queryId) ? event + ':/' + queryId : getWatchPath(event, path)
   path = path.split('#')[0]
 
   if (!id) {
