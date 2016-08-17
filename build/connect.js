@@ -132,7 +132,9 @@ exports.default = function () {
       }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-          var firebase = this.context.store.firebase;
+          var _context$store2 = this.context.store;
+          var firebase = _context$store2.firebase;
+          var dispatch = _context$store2.dispatch;
 
           (0, _actions.unWatchEvents)(firebase, dispatch, this._firebaseEvents);
         }
