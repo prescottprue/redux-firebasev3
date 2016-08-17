@@ -54,8 +54,8 @@ var getQueryIdFromPath = function getQueryIdFromPath(path) {
   return queryId && queryId.length > 0 ? queryId[0] : undefined;
 };
 
-var unsetWatcher = function unsetWatcher(firebase, event, path) {
-  var queryId = arguments.length <= 3 || arguments[3] === undefined ? undefined : arguments[3];
+var unsetWatcher = function unsetWatcher(firebase, dispatch, event, path) {
+  var queryId = arguments.length <= 4 || arguments[4] === undefined ? undefined : arguments[4];
 
   var id = queryId ? event + ':/' + queryId : getWatchPath(event, path);
   path = path.split('#')[0];
@@ -95,7 +95,7 @@ var watchEvent = exports.watchEvent = function watchEvent(firebase, dispatch, ev
 
   if (counter > 0) {
     if (queryId) {
-      unsetWatcher(firebase, event, path, queryId);
+      unsetWatcher(firebase, dispatch, event, path, queryId);
     } else {
       return;
     }
@@ -205,9 +205,9 @@ var watchEvent = exports.watchEvent = function watchEvent(firebase, dispatch, ev
   runQuery(query, event, path);
 };
 
-var unWatchEvent = exports.unWatchEvent = function unWatchEvent(firebase, event, path) {
-  var queryId = arguments.length <= 3 || arguments[3] === undefined ? undefined : arguments[3];
-  return unsetWatcher(firebase, event, path, queryId);
+var unWatchEvent = exports.unWatchEvent = function unWatchEvent(firebase, dispatch, event, path) {
+  var queryId = arguments.length <= 4 || arguments[4] === undefined ? undefined : arguments[4];
+  return unsetWatcher(firebase, dispatch, event, path, queryId);
 };
 
 var watchEvents = exports.watchEvents = function watchEvents(firebase, dispatch, events) {

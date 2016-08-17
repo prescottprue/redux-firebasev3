@@ -49,7 +49,7 @@ const getQueryIdFromPath = (path) => {
     ? queryId[0] : undefined
 }
 
-const unsetWatcher = (firebase, event, path, queryId = undefined) => {
+const unsetWatcher = (firebase, dispatch, event, path, queryId = undefined) => {
   let id = (queryId) ? event + ':/' + queryId : getWatchPath(event, path)
   path = path.split('#')[0]
 
@@ -88,7 +88,7 @@ export const watchEvent = (firebase, dispatch, event, path, dest) => {
 
   if (counter > 0) {
     if (queryId) {
-        unsetWatcher(firebase, event, path, queryId)
+        unsetWatcher(firebase, dispatch, event, path, queryId)
       } else {
         return
       }
@@ -201,8 +201,8 @@ export const watchEvent = (firebase, dispatch, event, path, dest) => {
   runQuery(query, event, path)
 }
 
-export const unWatchEvent = (firebase, event, path, queryId = undefined) =>
-    unsetWatcher(firebase, event, path, queryId)
+export const unWatchEvent = (firebase, dispatch, event, path, queryId = undefined) =>
+    unsetWatcher(firebase, dispatch, event, path, queryId)
 
 export const watchEvents = (firebase, dispatch, events) =>
     events.forEach(event => watchEvent(firebase, dispatch, event.name, event.path))
