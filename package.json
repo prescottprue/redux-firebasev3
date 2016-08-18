@@ -43,8 +43,7 @@
   ],
   "dependencies": {
     "es6-promise": "^3.2.1",
-    "immutable": "^3.7.6",
-    "moment": "^2.13.0"
+    "immutable": "^3.7.6"
   },
   "peerDependencies": {
     "firebase": "^3.0.0",

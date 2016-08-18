@@ -11,7 +11,6 @@ import {
 } from './constants'
 
 import { Promise } from 'es6-promise'
-var moment = require('moment');
 
 const getWatchPath = (event, path) => event + ':' + ((path.substring(0, 1) === '/') ? '' : '/') + path
 
@@ -102,7 +101,7 @@ export const watchEvent = (firebase, dispatch, event, path, dest) => {
       if (snapshot.val() === null) {
         dispatch({
           type: NO_VALUE,
-          timestamp: moment(),
+          timestamp: Date.now(),
           requesting : false,
           requested : true,
           path
@@ -169,7 +168,7 @@ export const watchEvent = (firebase, dispatch, event, path, dest) => {
   const runQuery = (q, e, p) => {
       dispatch({
         type: START,
-        timestamp: moment(),
+        timestamp: Date.now(),
         requesting : true,
         requested : false,
         path
@@ -190,7 +189,7 @@ export const watchEvent = (firebase, dispatch, event, path, dest) => {
           path : resultPath,
           rootPath,
           data,
-          timestamp: moment(),
+          timestamp: Date.now(),
           requesting : false,
           requested : true,
           snapshot
