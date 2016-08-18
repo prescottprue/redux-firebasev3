@@ -177,8 +177,8 @@ export const watchEvent = (firebase, dispatch, event, path, dest) => {
   
     q.on(e, snapshot => {
       let data = (e === 'child_removed') ? undefined : snapshot.val()
-      const resultPath = (dest) ? dest : (e === 'value') ? p : p + '/' + snapshot.key
-      const rootPath = (dest) ? dest :  path
+      const resultPath = dest || (e === 'value') ? p : p + '/' + snapshot.key
+      const rootPath = dest || path
       if (dest && e !== 'child_removed') {
         data = {
           _id: snapshot.key,

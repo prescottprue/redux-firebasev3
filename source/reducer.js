@@ -112,8 +112,8 @@ export default (state = initialState, action = {}) => {
         profile: null,
         data: {},
         timestamp: {},
-        requesting: {},
-        requested: {},
+        requesting: false,
+        requested: false,
         snapshot: {}
       })
 

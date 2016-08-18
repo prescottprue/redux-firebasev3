@@ -181,8 +181,8 @@ var watchEvent = exports.watchEvent = function watchEvent(firebase, dispatch, ev
 
     q.on(e, function (snapshot) {
       var data = e === 'child_removed' ? undefined : snapshot.val();
-      var resultPath = dest ? dest : e === 'value' ? p : p + '/' + snapshot.key;
-      var rootPath = dest ? dest : path;
+      var resultPath = dest || e === 'value' ? p : p + '/' + snapshot.key;
+      var rootPath = dest || path;
       if (dest && e !== 'child_removed') {
         data = {
           _id: snapshot.key,

@@ -109,8 +109,8 @@ exports.default = function () {
         profile: null,
         data: {},
         timestamp: {},
-        requesting: {},
-        requested: {},
+        requesting: false,
+        requested: false,
         snapshot: {}
       });
 
