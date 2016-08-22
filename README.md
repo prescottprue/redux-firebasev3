@@ -25,9 +25,29 @@
 $ npm install --save redux-firebasev3
 ```
 
+## Before Use
+
+### Peer Dependencies
+
+Install peer dependencies: `npm i --save redux react-redux firebase`
+
+### Decorators
+This library is meant to be used with decorators. In order to enable this functionality, you will most likley need to install a plugin (depending on your build setup). For webpack and babel, you will need to make sure you have installed and enabled  [babel-plugin-transform-decorators-legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) by doing the following:
+
+1. run `npm i --save-dev babel-plugin-transform-decorators-legacy`
+2. Add the following line to your `.babelrc`:
+```
+{
+    "plugins": ["transform-decorators-legacy"]
+}
+```
+
+
+
 ## Use
 
-Include redux-react-firebase in your store
+Include reduxFirebase in your store compose function:
+
 
 ```javascript
 import { createStore, combineReducers, compose } from 'redux'
@@ -46,7 +66,7 @@ const config = {
   storageBucket: '<your-storage-bucket>'
 }
 
-// Function to create store
+// Add redux Firebase to compose
 const createStoreWithFirebase = compose(
   reduxFirebase(config, { userProfile: 'users' }),
 )(createStore)
@@ -59,20 +79,22 @@ In components:
 ```javascript
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {firebase, helpers} from 'redux-react-firebase'
+import {firebase, helpers} from 'redux-firebasev3'
 
 const {isLoaded, isEmpty, dataToJS} = helpers
 
 @firebase( [
-  'todos'
+  '/todos'
 ])
 @connect(
   ({firebase}) => ({
-    todos: dataToJS(firebase, 'todos'),
+    todos: dataToJS(firebase, '/todos'),
   })
 )
 class Todos extends Component {
-
+  static propTypes = {
+    todos: PropTypes.object
+  }
   render() {
     const {firebase, todos} = this.props;
 
