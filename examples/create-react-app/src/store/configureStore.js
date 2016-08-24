@@ -1,7 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import rootReducer from '../reducers'
 import thunk from 'redux-thunk'
-import { syncHistoryWithStore } from 'react-router-redux'
 import { reduxFirebase } from 'redux-firebasev3'
 
 // Firebase config
@@ -27,11 +26,12 @@ export default function configureStore (initialState, history) {
     typeof window === 'object' && typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : f => f
   )(createStore)
   const store = createStoreWithMiddleware(rootReducer, initialState)
-  
+
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../reducers', () => {
-      const nextRootReducer = require('../reducers')
+      console.log('reducers in hot reload', require('../reducers'))
+      const nextRootReducer = require('../reducers').default
       store.replaceReducer(nextRootReducer)
     })
   }

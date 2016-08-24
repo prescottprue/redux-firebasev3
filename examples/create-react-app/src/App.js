@@ -4,19 +4,17 @@ import './App.css'
 import { connect } from 'react-redux'
 import { firebase, helpers } from 'redux-firebasev3'
 
-const {isLoaded, isEmpty, dataToJS, pathToJS} = helpers
+const {dataToJS, pathToJS} = helpers
 
-@firebase( [
-  ['/cars']
-])
+@firebase(['/cars'])
 @connect(
   ({firebase}) => ({
     cars: dataToJS(firebase, '/cars'),
-    profile: pathToJS(firebase, 'profile'),
+    profile: pathToJS(firebase, 'profile')
   })
 )
 export default class App extends Component {
-  render() {
+  render () {
     console.log('props:', this.props)
     return (
       <div className="App">
@@ -28,8 +26,6 @@ export default class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
       </div>
-    );
+    )
   }
 }
-
-export default App;
