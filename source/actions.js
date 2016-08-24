@@ -6,7 +6,9 @@ import {
     LOGOUT,
     LOGIN_ERROR,
     NO_VALUE,
-    INIT_BY_PATH
+    INIT_BY_PATH,
+  AUTHENTICATION_STARTED,
+  AUTHENTICATION_FINISHED
 } from './constants'
 
 import { Promise } from 'es6-promise'
@@ -271,6 +273,8 @@ export const login = (dispatch, firebase, credentials) => {
 }
 
 export const init = (dispatch, firebase) => {
+  dispatch({ type: AUTHENTICATION_STARTED })
+
   firebase.auth().onAuthStateChanged(authData => {
     if (!authData) {
       return dispatch({type: LOGOUT})
@@ -281,6 +285,8 @@ export const init = (dispatch, firebase) => {
 
     dispatchLogin(dispatch, authData)
   })
+
+  dispatch({ type: AUTHENTICATION_FINISHED })
 
   firebase.auth().currentUser
 }

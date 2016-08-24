@@ -7,6 +7,8 @@ import {
   LOGOUT,
   LOGIN_ERROR,
   NO_VALUE,
+  AUTHENTICATION_STARTED,
+  AUTHENTICATION_FINISHED,
   INIT_BY_PATH
 } from './constants'
 
@@ -14,6 +16,7 @@ const initialState = fromJS({
   auth: undefined,
   authError: undefined,
   profile: undefined,
+  isLoading: false,
   data: {},
   snapshot: {}
 })
@@ -103,6 +106,12 @@ export default (state = initialState, action = {}) => {
       return (profile !== undefined)
         ? state.setIn(['profile'], fromJS(profile))
         : state.deleteIn(['profile'])
+
+    case AUTHENTICATION_STARTED:
+      return state.set('isLoading', true)
+
+    case AUTHENTICATION_FINISHED:
+      return state.set('isLoading', false)
 
     case LOGOUT:
       return fromJS({
