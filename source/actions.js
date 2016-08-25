@@ -87,11 +87,11 @@ export const watchEvent = (firebase, dispatch, event, path, dest, onlyLastEvent)
   if (counter > 0) {
     if (onlyLastEvent) {
        // listen only to last query on same path
-       if (queryId) {
-         unsetWatcher(firebase, event, path, queryId)
-       } else {
-         return
-       }
+      if (queryId) {
+        unsetWatcher(firebase, event, path, queryId)
+      } else {
+        return
+      }
     }
   }
 
