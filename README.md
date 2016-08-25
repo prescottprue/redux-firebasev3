@@ -29,7 +29,7 @@ $ npm install --save redux-firebasev3
 
 ### Peer Dependencies
 
-Install peer dependencies: `npm i --save redux react-redux firebase`
+Install peer dependencies: `npm i --save redux react-redux`
 
 ### Decorators
 This library is meant to be used with decorators. In order to enable this functionality, you will most likley need to install a plugin (depending on your build setup). For webpack and babel, you will need to make sure you have installed and enabled  [babel-plugin-transform-decorators-legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) by doing the following:

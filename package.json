@@ -55,7 +55,7 @@
   "dependencies": {
     "es6-promise": "^3.2.1",
     "immutable": "^3.7.6",
-    "firebase": "^3.0.0",
+    "firebase": "^3.3.0",
     "lodash": "*"
   },
   "peerDependencies": {
@@ -70,7 +70,6 @@
     "babel-eslint": "^6.1.2",
     "babel-plugin-lodash": "^3.2.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-runtime": "^6.9.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-1": "^6.3.13",
