@@ -1,46 +1,61 @@
-import React, { Component } from 'react'
+import React, { PropTypes, Component } from 'react'
+import logo from './logo.svg';
 import './App.css'
 import { connect } from 'react-redux'
 import { firebase, helpers } from 'redux-firebasev3'
+import { map } from 'lodash'
 
-const { isLoaded, dataToJS, pathToJS } = helpers
+const { isLoaded, isEmpty, pathToJS, dataToJS } = helpers
+import TodoItem from './TodoItem'
 
-@firebase(['/cars'])
+@firebase(['/todos'])
 @connect(
   ({firebase}) => ({
-    cars: dataToJS(firebase, '/cars'),
-    profile: pathToJS(firebase, 'profile'),
+    todos: dataToJS(firebase, '/todos'),
+    profile: pathToJS(firebase, 'profile')
   })
 )
 export default class App extends Component {
-  render() {
+  static propTypes = {
+    todos: PropTypes.object
+  }
+  render () {
     console.log('props:', this.props)
-    const { cars } = this.props
+    const handleAdd = () => {
+      const {newTodo} = this.refs
+      firebase.push('/todos', { text:newTodo.value, done:false })
+      newTodo.value = ''
+    }
+    const { todos } = this.props
+    const todosList = (!isLoaded(todos)) ?
+                          'Loading'
+                        : (isEmpty(todos)) ?
+                               'Todo list is emtpy'
+                             : map(todos, (todo, id) => (<TodoItem key={id} id={id} todo={todo}/>) )
     return (
       <div className="App">
         <div className="App-header">
           <h2>redux-firebasev3 demo</h2>
+          <img src={logo} className="App-logo" alt="logo" />
         </div>
-        <div className="App-intro">
-          {
-            isLoaded(cars)
-            ? Object.keys(cars).map((key, i) => {
-                const car = cars[key]
-                return (
-                  <div key={`Car-${i}`}>
-                    <span>
-                      Name: { car.name || 'no name'}<br/>
-                      Hp: { car.hp }
-                    </span>
-                  </div>
-                )
-              })
-            : <span>Loading...</span>
-          }
+        <div className="App-todos">
+          <h4>
+            Loaded From
+            <span className="App-Url">
+              <a href="https://redux-firebasev3.firebaseio.com/">
+                redux-firebasev3.firebaseio.com
+              </a>
+            </span>
+          </h4>
+          <h4>Todos List</h4>
+          {todosList}
+          <h4>New Todo</h4>
+          <input type="text" ref="newTodo" />
+          <button onClick={handleAdd}>Add</button>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App

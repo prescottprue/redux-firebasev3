@@ -18,6 +18,14 @@
   font-size: large;
 }
 
+.App-Url {
+  margin-left: 1rem;
+}
+.App-Car {
+  margin: 1rem;
+}
+
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

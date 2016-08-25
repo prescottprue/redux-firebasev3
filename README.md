@@ -124,16 +124,26 @@ class Todos extends Component {
 ## API
 See [API](API.md)
 
-## Example
-You can see a complete example [here](example)
+## Examples
+
+You can see a complete examples [here](examples)
+
+### [Simple Example](examples/simple)
+
+A simple example that is the output of [create-react-app](https://github.com/facebookincubator/create-react-app)'s eject command. Shows a list of todo items
+
+### [Material Example](examples/material)
+
+An example that user Material UI built on top of the output of [create-react-app](https://github.com/facebookincubator/create-react-app)'s eject command. Shows a list of todo items
+
 
 ## In the future
 - Ideas are welcome :)
 
 ## Contributors
+- [Prescott Prue](https://github.com/prescottprue)
 - [Tiberiu Craciun](https://github.com/tiberiuc)
 - [Rahav Lussto](https://github.com/RahavLussato)
-- [Prescott Prue](https://github.com/prescottprue)
 - [Justin Handley](https://github.com/justinhandley)
 
 [npm-image]: https://img.shields.io/npm/v/redux-firebasev3.svg?style=flat-square

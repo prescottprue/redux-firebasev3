@@ -13,7 +13,7 @@ module.exports = {
   parser: 'babel-eslint',
 
   // import plugin is termporarily disabled, scroll below to see why
-  plugins: [/*'import', */'flowtype', 'jsx-a11y', 'react'],
+  plugins: [/*'import', *//*'flowtype', *//*'jsx-a11y',*/ 'react' ],
 
   env: {
     browser: true,
