@@ -1,7 +1,7 @@
 import Firebase from 'firebase'
 import * as Actions from './actions'
 
-export default (config) => {
+export default (config, otherConfig) => {
   return next => (reducer, initialState) => {
     const defaultConfig = {
       userProfile: null
@@ -10,16 +10,19 @@ export default (config) => {
     const store = next(reducer, initialState)
 
     const {dispatch} = store
+    const {apiKey, authDomain, databaseURL, storageBucket} = config
 
-    if (!config.databaseURL) throw new Error('Firebase Database URL is required')
+    if (!databaseURL) throw new Error('Firebase databaseURL is required')
+    if (!authDomain) throw new Error('Firebase authDomain is required')
+    if (!apiKey) throw new Error('Firebase apiKey is required')
 
     try {
-      Firebase.initializeApp(config)
+      Firebase.initializeApp({apiKey, authDomain, databaseURL, storageBucket})
     } catch (err) {}
 
     const ref = Firebase.database().ref()
 
-    const configs = Object.assign({}, defaultConfig, config)
+    const configs = Object.assign({}, defaultConfig, config, otherConfig)
 
     const firebase = Object.defineProperty(Firebase, '_', {
       value: {

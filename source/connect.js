@@ -98,9 +98,7 @@ export default (dataOrFn = []) => WrappedComponent => {
     }
   }
   FirebaseConnect.contextTypes = {
-    store: function () {
-      return PropTypes.object.isRequired
-    }
+    store: PropTypes.object.isRequired
   }
   return FirebaseConnect
 }
