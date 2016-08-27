@@ -24,8 +24,7 @@ const { pathToJS } = helpers
 export default class Login extends Component {
 
   static propTypes = {
-    account: PropTypes.object,
-    firebase: PropTypes.object.isRequired
+    account: PropTypes.object
   }
 
   state = {
@@ -51,8 +50,8 @@ export default class Login extends Component {
   }
 
   render () {
-    const { account, authError } = this.props
-
+    const { account, authError, firebase } = this.props
+    console.log('account:', firebase)
     if (account && account.isFetching) {
       return (
         <div className='Login'>
