@@ -46,9 +46,9 @@
   display: inline;
   font-size: .8rem;
   color: $linkBlue;
-  .LoginForm:hover {
-    text-decoration: underline;
-  }
+}
+.LoginForm-Recover-Link:hover {
+  text-decoration: underline;
 }
 .LoginForm-Progress {
   margin-top: 5rem;

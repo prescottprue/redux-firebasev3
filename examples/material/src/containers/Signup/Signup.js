@@ -50,22 +50,14 @@ export default class Signup extends Component {
       snackCanOpen: false
     })
 
-  handleSignup = (signupData) => {
-    console.log('handle signup:', signupData, this.props.firebase)
-    const {email, password, username} = signupData
+  handleSignup = ({ email, password, username }) => {
     this.setState({ snackCanOpen: true })
     this.props.firebase.createUser({ email, password }, { username })
   }
 
-  providerSignup = provider => {
-    this.setState({ snackCanOpen: true })
-    this.props.firebase.login(provider)
-    event({ category: 'User', action: 'Provider Signup', value: provider })
-  }
-
   render () {
     const { account, authError } = this.props
-    console.log('autherror:', authError)
+
     if (account && account.isFetching) {
       return (
         <div className='Signup'>

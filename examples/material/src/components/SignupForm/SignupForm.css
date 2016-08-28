@@ -7,11 +7,11 @@
   flex-grow: 1;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   font-size: 1.4rem;
 }
-.Signup-Submit {
+.SignupForm-Submit {
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
