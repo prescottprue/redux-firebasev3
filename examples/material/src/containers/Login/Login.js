@@ -43,6 +43,7 @@ export default class Login extends Component {
     })
 
   handleLogin = loginData => {
+    console.log('handle login called:', loginData)
     this.setState({
       snackCanOpen: true
     })

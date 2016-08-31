@@ -19,21 +19,36 @@ export default class LoginForm extends Component {
     errors: { email: null, password: null }
   }
 
+  handleTextChange = (name, value) => {
+
+    this.setState({text: value });
+  }
+
   render () {
     const { account, onLogin } = this.props
     const { errors } = this.state
+
+    const handleSubmit = (e) => {
+      e.preventDefault()
+      const { email, password } = this.state
+      onLogin({ email, password })
+    }
+
     return (
-      <form className='LoginForm' onSubmit={onLogin}>
+      <form className='LoginForm' onSubmit={handleSubmit}>
         <TextField
           floatingLabelText='Email'
           name="email"
+          onChange={({ target }) => { this.setState({email: target.value}) }}
           errorText={errors.email}
           style={fieldStyle}
         />
         <TextField
           floatingLabelText='Password'
           name='password'
+          type='password'
           errorText={errors.password}
+          onChange={({ target }) => { this.setState({password: target.value}) }}
           style={fieldStyle}
         />
         <div className='LoginForm-Submit'>
@@ -44,19 +59,6 @@ export default class LoginForm extends Component {
             disabled={account && account.isFetching}
             style={buttonStyle}
           />
-        </div>
-        <div className='LoginForm-Options'>
-          <div className='LoginForm-Remember'>
-            <Checkbox
-              name='remember'
-              value='remember'
-              label='Remember'
-              labelStyle={{ fontSize: '.8rem' }}
-            />
-          </div>
-          <Link className='LoginForm-Recover-Link' to='/recover'>
-            Forgot Password?
-          </Link>
         </div>
       </form>
     )
