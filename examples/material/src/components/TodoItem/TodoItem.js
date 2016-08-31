@@ -38,8 +38,8 @@ export default class TodoItem extends Component {
           rightIcon={deleteButton}
           secondaryText={
             <p>
-              {todo.owner || 'none'}<br/>
-              {todo.text}
+              <span className="TodoItem-Text">{todo.text}</span><br/>
+              <span className="TodoItem-Owner">{todo.owner || 'No Owner'}</span>
             </p>
           }
           secondaryTextLines={2}

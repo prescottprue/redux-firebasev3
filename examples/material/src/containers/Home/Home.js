@@ -44,12 +44,12 @@ export default class Home extends Component {
   }
 
   render () {
-    const { todos, auth } = this.props
+    const { todos } = this.props
 
     return (
       <div className="Home">
         <div className="Home-Info">
-          <span>Loaded</span> From<br/>
+          from  
           <span className="Home-Url">
             <a href="https://redux-firebasev3.firebaseio.com/">
               redux-firebasev3.firebaseio.com
@@ -80,7 +80,7 @@ export default class Home extends Component {
           </Paper>
           <NewTodoPanel
             onNewClick={this.handleAdd}
-            disabled={!auth}
+            disabled={false}
           />
         </div>
       </div>

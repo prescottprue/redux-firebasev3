@@ -14,6 +14,7 @@ const initialState = fromJS({
   auth: undefined,
   authError: undefined,
   profile: undefined,
+  isLoading: false,
   data: {},
   snapshot: {}
 })
@@ -58,6 +59,7 @@ export default (state = initialState, action = {}) => {
         auth: null,
         authError: null,
         profile: null,
+        isLoading: false,
         data: {},
         snapshot: {}
       })
@@ -72,11 +74,14 @@ export default (state = initialState, action = {}) => {
               .setIn(['auth'], null)
               .setIn(['profile'], null)
 
+    // case AUTHENTICATION_INIT_STARTED:
+    //   return state.setIn(['isLoading'], true) // state.setIn not a function
+
     case AUTHENTICATION_INIT_STARTED:
-      return state.set('isLoading', true)
+      return Object.assign({}, state, { isLoading: true })
 
     case AUTHENTICATION_INIT_FINISHED:
-      return state.set('isLoading', false)
+      return Object.assign({}, state, { isLoading: false })
 
     default:
       return state

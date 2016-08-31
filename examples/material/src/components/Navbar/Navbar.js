@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import './Navbar.css'
-
+import { Link } from 'react-router'
 // Components
 import AppBar from 'material-ui/AppBar'
 import IconMenu from 'material-ui/IconMenu'
@@ -10,6 +10,7 @@ import Avatar from 'material-ui/Avatar'
 
 const stockPhotoUrl = 'https://s3.amazonaws.com/kyper-cdn/img/User.png'
 const originSettings = { horizontal: 'right', vertical: 'top' }
+const buttonStyle = { color: 'white' }
 const avatarSize = 50
 
 export default class Navbar extends Component {
@@ -42,8 +43,16 @@ export default class Navbar extends Component {
 
     const mainMenu = (
       <div className='Navbar-Main-Menu'>
-        <FlatButton label='Sign Up' onClick={() => this.selectItem('signup')} />
-        <FlatButton label='Login' onClick={() => this.selectItem('login')} />
+        <FlatButton
+          label='Sign Up'
+          style={buttonStyle}
+          onClick={() => this.selectItem('signup')}
+        />
+        <FlatButton
+          label='Login'
+          style={buttonStyle}
+          onClick={() => this.selectItem('login')}
+        />
       </div>
     )
 
@@ -62,7 +71,11 @@ export default class Navbar extends Component {
 
     return (
       <AppBar
-        title='redux-firebasev3'
+        title={
+          <Link to='/' style={{color: 'white'}}>
+            redux-firebasev3
+          </Link>
+        }
         className='Navbar'
         showMenuIconButton={false}
         iconElementRight={rightMenu}

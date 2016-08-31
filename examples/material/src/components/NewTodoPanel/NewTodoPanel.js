@@ -16,12 +16,13 @@ export default class NewTodoPanel extends Component {
 
   handleAdd = () => {
     const { newTodo } = this.refs
-    this.props.onNewClick({ text: newTodo.value, done:false })
+    const { text } = this.state
+    this.props.onNewClick({ text, done: false })
     newTodo.value = ''
   }
 
   render () {
-    const { profile, disabled } = this.props
+    const { disabled } = this.props
 
     return (
       <Paper className="NewTodoPanel-Paper">
@@ -29,13 +30,14 @@ export default class NewTodoPanel extends Component {
         <TextField
           floatingLabelText="New Todo Text"
           ref="newTodo"
+          onChange={({ target }) => { this.setState({text: target.value}) }}
           className="NewTodoPanel-Input"
         />
         <IconButton
           onClick={this.handleAdd}
           disabled={disabled}
           tooltipPosition={'top-center'}
-          tooltip={profile ? 'Add Todo' : 'Login To Add Todo'}
+          tooltip={ disabled ? 'Login To Add Todo' : 'Add Todo' }
         >
           <ContentAdd />
         </IconButton>

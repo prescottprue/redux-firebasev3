@@ -31,7 +31,7 @@ export default class Login extends Component {
   }
 
   componentWillReceiveProps ({ account }) {
-    if (account.username) {
+    if (account && account.username) {
       this.context.router.push(`/${account.username}`)
     }
   }
@@ -69,8 +69,8 @@ export default class Login extends Component {
         {
           authError && authError.message
           ? <Snackbar
-              open={authError.message && this.state.snackCanOpen}
-              message={authError || 'Error'}
+              open={authError && this.state.snackCanOpen}
+              message={authError.message || 'Error'}
               action='close'
               autoHideDuration={3000}
               onRequestClose={this.handleRequestClose}
