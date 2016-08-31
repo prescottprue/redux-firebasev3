@@ -74,14 +74,11 @@ export default (state = initialState, action = {}) => {
               .setIn(['auth'], null)
               .setIn(['profile'], null)
 
-    // case AUTHENTICATION_INIT_STARTED:
-    //   return state.setIn(['isLoading'], true) // state.setIn not a function
-
     case AUTHENTICATION_INIT_STARTED:
-      return Object.assign({}, state, { isLoading: true })
+      return state.setIn(['isLoading'], true);
 
     case AUTHENTICATION_INIT_FINISHED:
-      return Object.assign({}, state, { isLoading: false })
+      return state.setIn(['isLoading'], false);
 
     default:
       return state
