@@ -141,8 +141,8 @@ class Todos extends Component {
 
 ```
 
-## API
-See [API](API.md)
+## [API](https://prescottprue.gitbooks.io/redux-firebasev3/content/)
+See [API Docs](https://prescottprue.gitbooks.io/redux-firebasev3/content/)
 
 ## [Examples](examples)
 

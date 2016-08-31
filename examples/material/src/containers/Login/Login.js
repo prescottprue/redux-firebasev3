@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
 
 // Components
 import LoginForm from '../../components/LoginForm/LoginForm'
@@ -43,7 +42,6 @@ export default class Login extends Component {
     })
 
   handleLogin = loginData => {
-    console.log('handle login called:', loginData)
     this.setState({
       snackCanOpen: true
     })
@@ -68,18 +66,10 @@ export default class Login extends Component {
         <Paper className='Login-Panel'>
           <LoginForm onLogin={this.handleLogin} />
         </Paper>
-        <div className='Login-Signup'>
-          <span className='Login-Signup-Label'>
-            Need an account?
-          </span>
-          <Link className='Login-Signup-Link' to='/signup'>
-            Sign Up
-          </Link>
-        </div>
         {
           authError && authError.message
           ? <Snackbar
-              open={typeof authError !== 'undefined' && this.state.snackCanOpen}
+              open={authError.message && this.state.snackCanOpen}
               message={authError || 'Error'}
               action='close'
               autoHideDuration={3000}
@@ -87,7 +77,6 @@ export default class Login extends Component {
             />
           : null
         }
-
       </div>
     )
   }

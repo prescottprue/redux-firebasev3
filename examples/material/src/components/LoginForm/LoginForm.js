@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react'
-import { Link } from 'react-router'
 import RaisedButton from 'material-ui/RaisedButton'
-import Checkbox from 'material-ui/Checkbox'
-import './LoginForm.css'
 import TextField from 'material-ui/TextField'
+
+import './LoginForm.css'
 
 const buttonStyle = { width: '100%' }
 const fieldStyle = { width: '80%' }
@@ -19,18 +18,22 @@ export default class LoginForm extends Component {
     errors: { email: null, password: null }
   }
 
-  handleTextChange = (name, value) => {
-
-    this.setState({text: value });
-  }
-
   render () {
     const { account, onLogin } = this.props
     const { errors } = this.state
 
     const handleSubmit = (e) => {
       e.preventDefault()
-      const { email, password } = this.state
+      const { email, password, errors } = this.state
+
+      if (!email || !password) {
+        if (!email) errors.email = 'Email is Required'
+        if (!password) errors.password = 'Password is Required'
+        return this.setState({ errors })
+      }
+
+      this.setState({ errors: { email: null, password: null }})
+
       onLogin({ email, password })
     }
 

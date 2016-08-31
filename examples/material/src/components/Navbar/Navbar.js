@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import './Navbar.css'
-import { Link } from 'react-router'
 
 // Components
 import AppBar from 'material-ui/AppBar'
@@ -21,7 +20,7 @@ export default class Navbar extends Component {
     onLogoutClick: PropTypes.func
   }
 
-  selectItem = (e, item) => {
+  selectItem = (item) => {
     if (item === 'logout' && this.props.onLogoutClick) {
       return this.props.onLogoutClick()
     }
@@ -31,8 +30,8 @@ export default class Navbar extends Component {
   }
 
   render () {
-    const account = this.props.account
-    const brandLinkLoc = (account && account.username) ? `/${account.username}` : '/'
+    const { account } = this.props
+
     const iconButton = (
       <Avatar
         className='Navbar-Avatar'
@@ -40,12 +39,14 @@ export default class Navbar extends Component {
         size={avatarSize}
       />
     )
+
     const mainMenu = (
       <div className='Navbar-Main-Menu'>
-        <FlatButton label='Sign Up' onClick={this.selectItem.bind(this, null, 'signup')} />
-        <FlatButton label='Login' onClick={this.selectItem.bind(this, null, 'login')} />
+        <FlatButton label='Sign Up' onClick={() => this.selectItem('signup')} />
+        <FlatButton label='Login' onClick={() => this.selectItem('login')} />
       </div>
     )
+
     const rightMenu = account && account.username ? (
       <IconMenu
         iconButtonElement={iconButton}
@@ -58,9 +59,10 @@ export default class Navbar extends Component {
         <MenuItem primaryText='Sign out' value='logout' />
       </IconMenu>
     ) : mainMenu
+
     return (
       <AppBar
-        title={<Link className='Navbar-Brand' to={brandLinkLoc}>redux-firebasev3</Link>}
+        title='redux-firebasev3'
         className='Navbar'
         showMenuIconButton={false}
         iconElementRight={rightMenu}
