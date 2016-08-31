@@ -162,8 +162,8 @@ An example that user Material UI built on top of the output of [create-react-app
 
 ## In the future
 - Improved file/folder structure
-- Docs/Examples Page
 - Redux Form Example
+- Rules Error Handling
 - More Unit Tests/Coverage
 - Ideas are welcome :)
 
@@ -177,7 +177,7 @@ An example that user Material UI built on top of the output of [create-react-app
 
 ## Thanks
 
-Special thanks to [Tiberiu Craciun](https://github.com/tiberiuc) for creating [redux-react-firebase](https://github.com/tiberiuc/redux-react-firebase), which this project is originally forked from (git history still in project).
+Special thanks to [Tiberiu Craciun](https://github.com/tiberiuc) for creating [redux-react-firebase](https://github.com/tiberiuc/redux-react-firebase), which this project is heavily based on.
 
 [npm-image]: https://img.shields.io/npm/v/redux-firebasev3.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/redux-firebasev3

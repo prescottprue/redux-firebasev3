@@ -5,7 +5,9 @@ import {
   LOGIN,
   LOGOUT,
   LOGIN_ERROR,
-  NO_VALUE
+  NO_VALUE,
+  AUTHENTICATION_INIT_STARTED,
+  AUTHENTICATION_INIT_FINISHED
 } from './constants'
 
 const initialState = fromJS({
@@ -69,6 +71,12 @@ export default (state = initialState, action = {}) => {
               .setIn(['authError'], action.authError)
               .setIn(['auth'], null)
               .setIn(['profile'], null)
+
+    case AUTHENTICATION_INIT_STARTED:
+      return state.set('isLoading', true)
+
+    case AUTHENTICATION_INIT_FINISHED:
+      return state.set('isLoading', false)
 
     default:
       return state
