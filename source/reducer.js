@@ -10,14 +10,16 @@ import {
   AUTHENTICATION_INIT_FINISHED
 } from './constants'
 
-const initialState = fromJS({
+const emptyState = {
   auth: undefined,
   authError: undefined,
   profile: undefined,
-  isLoading: false,
+  isInitializing: undefined,
   data: {},
   snapshot: {}
-})
+}
+
+const initialState = fromJS(emptyState)
 
 const pathToArr = path => path.split(/\//).filter(p => !!p)
 
@@ -74,14 +76,12 @@ export default (state = initialState, action = {}) => {
               .setIn(['auth'], null)
               .setIn(['profile'], null)
 
-    // case AUTHENTICATION_INIT_STARTED:
-    //   return state.setIn(['isLoading'], true) // state.setIn not a function
-
     case AUTHENTICATION_INIT_STARTED:
-      return Object.assign({}, state, { isLoading: true })
+      return initialState.setIn(['isInitializing'], true)
+    // return state.setIn(['isInitializing'], true) // throws state.setIn not a function error
 
     case AUTHENTICATION_INIT_FINISHED:
-      return Object.assign({}, state, { isLoading: false })
+      return state.setIn(['isInitializing'], false)
 
     default:
       return state

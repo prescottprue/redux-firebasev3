@@ -12,6 +12,8 @@ import {
 
 import { Promise } from 'es6-promise'
 
+import { capitalize } from 'lodash'
+
 const getWatchPath = (event, path) => event + ':' + ((path.substring(0, 1) === '/') ? '' : '/') + path
 
 /**
@@ -317,7 +319,7 @@ const watchUserProfile = (dispatch, firebase) => {
  * @param {String} credentials.type - Popup or redirect (only needed for 3rd party provider login)
  * @param {String} credentials.token - Custom or provider token
  */
-const getLoginMethodAndParams = ({email, password, provider, type, token}) => {
+const getLoginMethodAndParams = ({email, password, provider, type, token}, firebase) => {
   if (provider) {
     if (token) {
       return {
@@ -325,15 +327,17 @@ const getLoginMethodAndParams = ({email, password, provider, type, token}) => {
         params: [ provider, token ]
       }
     }
+    const authProvider = new firebase.auth[`${capitalize(provider)}AuthProvider`]
+    authProvider.addScope('email')
     if (type === 'popup') {
       return {
         method: 'signInWithPopup',
-        params: [ provider ]
+        params: [ authProvider ]
       }
     }
     return {
       method: 'signInWithRedirect',
-      params: [ provider ]
+      params: [ authProvider ]
     }
   }
   if (token) {
@@ -361,7 +365,7 @@ const getLoginMethodAndParams = ({email, password, provider, type, token}) => {
  */
 export const login = (dispatch, firebase, credentials) => {
   dispatchLoginError(dispatch, null)
-  const { method, params } = getLoginMethodAndParams(credentials)
+  const { method, params } = getLoginMethodAndParams(credentials, firebase)
   return firebase.auth()[method](...params)
     .catch(err => {
       dispatchLoginError(dispatch, err)
