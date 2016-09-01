@@ -7,7 +7,8 @@ import {
   LOGIN_ERROR,
   NO_VALUE,
   AUTHENTICATION_INIT_STARTED,
-  AUTHENTICATION_INIT_FINISHED
+  AUTHENTICATION_INIT_FINISHED,
+  UNAUTHORIZED_ERROR
 } from './constants'
 
 const emptyState = {
@@ -82,6 +83,9 @@ export default (state = initialState, action = {}) => {
 
     case AUTHENTICATION_INIT_FINISHED:
       return state.setIn(['isInitializing'], false)
+
+    case UNAUTHORIZED_ERROR:
+      return state.setIn(['authError'], action.authError)
 
     default:
       return state
