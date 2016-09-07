@@ -1,5 +1,5 @@
-import * as auth from './auth'
-import * as query from './query'
+import * as authActions from './auth'
+import * as queryActions from './query'
 
-export { auth, query }
-export default Object.assign({}, auth, query)
+export { authActions, queryActions }
+export default Object.assign({}, authActions, queryActions)

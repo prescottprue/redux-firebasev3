@@ -1,5 +1,5 @@
 import Firebase from 'firebase'
-import * as Actions from './actions'
+import { authActions, queryActions } from './actions'
 
 export default (config, otherConfig) =>
   next => (reducer, initialState) => {
@@ -51,22 +51,22 @@ export default (config, otherConfig) =>
       ref.child(path).remove(onComplete)
 
     const watchEvent = (eventName, eventPath) =>
-      Actions.watchEvent(firebase, dispatch, eventName, eventPath, true)
+      queryActions.watchEvent(firebase, dispatch, eventName, eventPath, true)
 
     const unWatchEvent = (eventName, eventPath, queryId = undefined) =>
-      Actions.unWatchEvent(firebase, eventName, eventPath, queryId)
+      queryActions.unWatchEvent(firebase, eventName, eventPath, queryId)
 
     const login = credentials =>
-      Actions.login(dispatch, firebase, credentials)
+      authActions.login(dispatch, firebase, credentials)
 
     const logout = () =>
-      Actions.logout(dispatch, firebase)
+      authActions.logout(dispatch, firebase)
 
     const createUser = (credentials, profile) =>
-      Actions.createUser(dispatch, firebase, credentials, profile)
+      authActions.createUser(dispatch, firebase, credentials, profile)
 
     const resetPassword = (credentials) =>
-      Actions.resetPassword(dispatch, firebase, credentials)
+      authActions.resetPassword(dispatch, firebase, credentials)
 
     firebase.helpers = {
       set,
@@ -81,7 +81,7 @@ export default (config, otherConfig) =>
       unWatchEvent
     }
 
-    Actions.init(dispatch, firebase)
+    authActions.init(dispatch, firebase)
 
     store.firebase = firebase
 
