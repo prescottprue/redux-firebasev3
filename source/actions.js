@@ -509,6 +509,30 @@ export const createUser = (dispatch, firebase, { email, password }, profile) => 
 }
 
 /**
+ * @description Create a new user in auth and add an account to userProfile root without logging user in
+ * @param {Function} dispatch - Action dispatch function
+ * @param {Object} firebase - Internal firebase object
+ * @param {Object} credentials - Login credentials
+ * @return {Promise}
+ */
+export const createAdminUser = (dispatch, firebase, { email, password }, profile) => {
+  dispatchLoginError(dispatch, null)
+
+  if (!email || !password) {
+    dispatchLoginError(dispatch, new Error('Email and Password are required to create user'))
+    return Promise.reject('Email and Password are Required')
+  }
+
+  return firebase.auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then((userData) => createUserProfile(dispatch, firebase, userData, profile))
+    .catch((err) => {
+      dispatchLoginError(dispatch, err)
+      return Promise.reject(err)
+    })
+}
+
+/**
  * @description Send password reset email to provided email
  * @param {Function} dispatch - Action dispatch function
  * @param {Object} firebase - Internal firebase object
@@ -533,4 +557,4 @@ export const resetPassword = (dispatch, firebase, email) => {
     })
 }
 
-export default { watchEvents, unWatchEvents, init, logout, createUser, resetPassword }
+export default { watchEvents, unWatchEvents, init, logout, createUser, createAdminUser, resetPassword }
