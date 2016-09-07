@@ -475,7 +475,7 @@ export const logout = (dispatch, firebase) => {
  * @param {Object} credentials - Login credentials
  * @return {Promise}
  */
-export const createUser = (dispatch, firebase, { email, password }, profile) => {
+export const createUser = (dispatch, firebase, { email, password, signIn }, profile) => {
   dispatchLoginError(dispatch, null)
 
   if (!email || !password) {
@@ -485,23 +485,25 @@ export const createUser = (dispatch, firebase, { email, password }, profile) => 
 
   return firebase.auth()
     .createUserWithEmailAndPassword(email, password)
-    .then((userData) => {
-      // Login to newly created account
-      login(dispatch, firebase, { email, password })
-        .then(() => createUserProfile(dispatch, firebase, userData, profile))
-        .catch(err => {
-          if (err) {
-            switch (err.code) {
-              case 'auth/user-not-found':
-                dispatchLoginError(dispatch, new Error('The specified user account does not exist.'))
-                break
-              default:
-                dispatchLoginError(dispatch, err)
-            }
-          }
-          return Promise.reject(err)
-        })
-    })
+    .then((userData) =>
+      // Login to newly created account if signIn
+      firebase.auth().currentUser || (!!signIn && signIn === false)
+        ? createUserProfile(dispatch, firebase, userData, profile)
+        : login(dispatch, firebase, { email, password })
+            .then(() => createUserProfile(dispatch, firebase, userData, profile))
+            .catch(err => {
+              if (err) {
+                switch (err.code) {
+                  case 'auth/user-not-found':
+                    dispatchLoginError(dispatch, new Error('The specified user account does not exist.'))
+                    break
+                  default:
+                    dispatchLoginError(dispatch, err)
+                }
+              }
+              return Promise.reject(err)
+            })
+    )
     .catch((err) => {
       dispatchLoginError(dispatch, err)
       return Promise.reject(err)
