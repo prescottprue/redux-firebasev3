@@ -66,10 +66,15 @@ export default (config, otherConfig) =>
       Actions.resetPassword(dispatch, firebase, credentials)
 
     firebase.helpers = {
-      set, push, remove,
-      login, logout,
-      createUser, resetPassword,
-      watchEvent, unWatchEvent
+      set,
+      push,
+      remove,
+      login,
+      logout,
+      createUser,
+      resetPassword,
+      watchEvent,
+      unWatchEvent
     }
 
     Actions.init(dispatch, firebase)
