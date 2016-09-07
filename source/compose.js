@@ -50,6 +50,18 @@ export default (config, otherConfig) =>
     const remove = (path, onComplete) =>
       ref.child(path).remove(onComplete)
 
+    const uniqueSet = (path, value, onComplete) =>
+      ref.child(path)
+        .once('value')
+        .then(snap => {
+          if (snap.val && snap.val() !== null) {
+            const err = new Error('Path already exists.')
+            if (onComplete) onComplete(err)
+            return Promise.reject(err)
+          }
+          return ref.child(path).set(value, onComplete)
+        })
+
     const watchEvent = (eventName, eventPath) =>
       queryActions.watchEvent(firebase, dispatch, eventName, eventPath, true)
 
@@ -70,6 +82,7 @@ export default (config, otherConfig) =>
 
     firebase.helpers = {
       set,
+      uniqueSet,
       push,
       remove,
       update,
