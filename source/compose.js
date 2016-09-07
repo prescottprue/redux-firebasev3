@@ -65,13 +65,16 @@ export default (config, otherConfig) =>
     const createUser = (credentials, profile) =>
       Actions.createUser(dispatch, firebase, credentials, profile)
 
+    const adminCreateUser = (credentials, profile) =>
+      Actions.adminCreateUser(dispatch, firebase, credentials, profile)
+
     const resetPassword = (credentials) =>
       Actions.resetPassword(dispatch, firebase, credentials)
 
     firebase.helpers = {
       set, push, remove, update,
       login, logout,
-      createUser, resetPassword,
+      createUser, adminCreateUser, resetPassword,
       watchEvent, unWatchEvent
     }
 
