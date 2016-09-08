@@ -19,6 +19,7 @@
     "lint:fix": "npm run lint -- --fix",
     "test": "mocha -R spec --compilers js:babel-core/register ./test/setup.js ./test/**/*.spec.js",
     "test:cov": "babel-node $(npm bin)/isparta cover --report lcov ./node_modules/mocha/bin/_mocha -- ./test/** --recursive",
+    "codecov": "cat coverage/lcov.info | codecov",
     "prepush": "npm run lint:fix"
   },
   "contributors": [
@@ -80,6 +81,7 @@
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-1": "^6.13.0",
     "chai": "^3.5.0",
+    "codecov": "^1.0.1",
     "eslint": "^3.4.0",
     "eslint-config-standard": "^6.0.0",
     "eslint-config-standard-react": "^4.0.0",
