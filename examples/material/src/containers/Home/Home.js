@@ -14,8 +14,10 @@ import { firebase, helpers } from 'redux-firebasev3'
 const { isLoaded, pathToJS, dataToJS } = helpers
 
 @firebase([
-  '/todos'
+  // '/todos'
   // { type: 'once', path: '/todos' } // for loading once instead of binding
+  '/todos#populate=owner:displayNames' // for populating owner from id => string
+  // '/todos#populate=owner:users' // for populating owner from id => object
 ])
 @connect(
   ({firebase}) => ({
@@ -27,7 +29,11 @@ const { isLoaded, pathToJS, dataToJS } = helpers
 export default class Home extends Component {
 
   static propTypes = {
-    todos: PropTypes.object,
+    todos: PropTypes.shape({
+      done: PropTypes.bool,
+      text: PropTypes.string,
+      owner: PropTypes.string
+    }),
     firebase: PropTypes.shape({
       set: PropTypes.func.isRequired,
       remove: PropTypes.func.isRequired
@@ -48,15 +54,18 @@ export default class Home extends Component {
 
   handleAdd = (newTodo) => {
     const { firebase, auth } = this.props
+    // Attach user if logged in
     if (auth) {
       newTodo.owner = auth.uid
+    } else {
+      newTodo.owner = 'Anonymous'
     }
     firebase.push('/todos', newTodo)
   }
 
   render () {
     const { todos } = this.props
-
+    console.debug('todo list', todos)
     return (
       <div className="Home">
         <div className="Home-Info">
@@ -73,18 +82,19 @@ export default class Home extends Component {
             {
               !isLoaded(todos)
                 ? <CircularProgress />
-                : <List style={{width: '100%'}}>
+                : <List className="Home-List">
                     {
                       todos &&
-                      map(todos, (todo, id) => (
-                        <TodoItem
-                          key={id}
-                          id={id}
-                          todo={todo}
-                          onCompleteClick={this.toggleDone}
-                          onDeleteClick={this.deleteTodo}
-                        />
-                      ))
+                        map(todos, (todo, id) => (
+                          <TodoItem
+                            key={id}
+                            id={id}
+                            todo={todo}
+                            onCompleteClick={this.toggleDone}
+                            onDeleteClick={this.deleteTodo}
+                          />
+                        )
+                      )
                     }
                 </List>
             }
