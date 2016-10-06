@@ -144,6 +144,7 @@ const getLoginMethodAndParams = ({email, password, provider, type, token, scopes
         params: [ provider, token ]
       }
     }
+    console.debug('auth provider: ', `${capitalize(provider)}AuthProvider`)
     const authProvider = new firebase.auth[`${capitalize(provider)}AuthProvider`]()
     authProvider.addScope('email')
     if (scopes) {
@@ -215,7 +216,7 @@ export const login = (dispatch, firebase, credentials) => {
 
   // Handle multiple methods of sign in with redirect
   if (method === 'signInWithRedirect') {
-    firebase.auth().signInWithRedirect(params)
+    firebase.auth().signInWithRedirect(...params)
     method = 'getRedirectResult'
     params = null
   }
