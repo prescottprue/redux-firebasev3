@@ -45,6 +45,7 @@ export default class Home extends Component {
   }
 
   toggleDone = (todo, id) => {
+    console.log('toggle done', todo, id)
     this.props.firebase.set(`/todos/${id}/done`, !todo.done)
   }
 
@@ -65,7 +66,7 @@ export default class Home extends Component {
 
   render () {
     const { todos } = this.props
-    console.debug('todo list', todos)
+    // console.debug('todo list', todos)
     return (
       <div className="Home">
         <div className="Home-Info">

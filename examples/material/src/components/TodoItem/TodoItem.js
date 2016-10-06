@@ -7,7 +7,10 @@ import Delete from 'material-ui/svg-icons/action/delete'
 export default class TodoItem extends Component {
   static propTypes = {
     todo: PropTypes.object.isRequired,
-    id: PropTypes.string,
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     onDeleteClick: PropTypes.func,
     onCompleteClick: PropTypes.func
   }
@@ -23,12 +26,12 @@ export default class TodoItem extends Component {
     const checkbox = (
       <Checkbox
         defaultChecked={todo.done}
-        onCheck={() => { onCompleteClick(todo, id) }}
+        onCheck={() => { onCompleteClick(todo, todo._key || id) }}
       />
     )
 
     const deleteButton = (
-      <Delete onClick={() => { onDeleteClick(id) }} />
+      <Delete onClick={() => { onDeleteClick(todo._key || id) }} />
     )
 
     return (
@@ -38,8 +41,12 @@ export default class TodoItem extends Component {
           rightIcon={deleteButton}
           secondaryText={
             <p>
-              <span className="TodoItem-Text">{todo.text}</span><br/>
-              <span className="TodoItem-Owner">{todo.owner || 'No Owner'}</span>
+              <span className="TodoItem-Text">
+                {todo.text}
+              </span><br/>
+              <span className="TodoItem-Owner">
+                {todo.owner || 'No Owner'}
+              </span>
             </p>
           }
           secondaryTextLines={2}
