@@ -16,8 +16,9 @@ const { isLoaded, pathToJS, dataToJS } = helpers
 @firebase([
   // '/todos'
   // { type: 'once', path: '/todos' } // for loading once instead of binding
-  '/todos#populate=owner:displayNames' // for populating owner from id => string
-  // '/todos#populate=owner:users' // for populating owner from id => object
+  // '/todos#populate=owner:displayNames' // for populating owner parameter from id into string loaded from /displayNames root
+  // '/todos#populate=owner:users' // for populating owner parameter from id to user object loaded from /users root
+  '/todos#populate=owner:users:displayName' // for populating owner parameter from id within to displayName string from user object within users root
 ])
 @connect(
   ({firebase}) => ({
@@ -66,24 +67,24 @@ export default class Home extends Component {
 
   render () {
     const { todos } = this.props
-    // console.debug('todo list', todos)
+    console.debug('todo list:', todos)
     return (
-      <div className="Home">
-        <div className="Home-Info">
+      <div className='Home'>
+        <div className='Home-Info'>
           from
-          <span className="Home-Url">
-            <a href="https://redux-firebasev3.firebaseio.com/">
+          <span className='Home-Url'>
+            <a href='https://redux-firebasev3.firebaseio.com/'>
               redux-firebasev3.firebaseio.com
             </a>
           </span>
         </div>
-        <div className="Home-todos">
-          <Paper className="Home-Paper">
+        <div className='Home-todos'>
+          <Paper className='Home-Paper'>
             <Subheader>Todos</Subheader>
             {
               !isLoaded(todos)
                 ? <CircularProgress />
-                : <List className="Home-List">
+                : <List className='Home-List'>
                     {
                       todos &&
                         map(todos, (todo, id) => (

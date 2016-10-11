@@ -3,6 +3,7 @@ import './TodoItem.css'
 import { ListItem } from 'material-ui/List'
 import Checkbox from 'material-ui/Checkbox'
 import Delete from 'material-ui/svg-icons/action/delete'
+import { isObject } from 'lodash'
 
 export default class TodoItem extends Component {
   static propTypes = {
@@ -15,7 +16,7 @@ export default class TodoItem extends Component {
     onCompleteClick: PropTypes.func
   }
 
-  render(){
+  render() {
     const {
       todo,
       id,
@@ -45,7 +46,11 @@ export default class TodoItem extends Component {
                 {todo.text}
               </span><br/>
               <span className="TodoItem-Owner">
-                {todo.owner || 'No Owner'}
+                {
+                  isObject(todo.owner)
+                  ? todo.owner.displayName
+                  : todo.owner || 'No Owner'
+                }
               </span>
             </p>
           }

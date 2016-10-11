@@ -228,6 +228,7 @@ export const watchEvent = (firebase, dispatch, event, path, dest, onlyLastEvent 
       const listToPopulate = snapshot.val()
       const paramToPopulate = populate.split(':')[0]
       const populateRoot = populate.split(':')[1]
+      const populateKey = populate.split(':')[2]
       const listRef = firebase.database().ref().child(populateRoot)
 
       // Create list of promises (one for each population)
@@ -246,13 +247,18 @@ export const watchEvent = (firebase, dispatch, event, path, dest, onlyLastEvent 
                     ? item[paramToPopulate]
                     // Handle population value (object/string)
                     : isObject(snap.val())
-                      // Return object with snap and key attached
-                      ? Object.assign(
-                          snap.val(),
-                          { _snap: snap, _key: snap.key }
-                        )
+                      // Handle selecting of a specific value within object
+                      ? (populateKey && snap.val()[populateKey])
+                        // Return value at populate key
+                        ? snap.val()[populateKey]
+                        // Return object with snap and key attached
+                        : Object.assign(
+                            snap.val(),
+                            { _snap: snap, _key: snap.key }
+                          )
                       // Return value (string, number or bool)
                       : snap.val()
+
                 )
                 .then((populatedList) => {
                   const newItem = item
