@@ -33,7 +33,6 @@ export default (state = initialState, action = {}) => {
     case SET:
       const { data } = action
       pathArr = pathToArr(path)
-      console.log('data:', data)
       retVal = (data !== undefined)
         ? state.setIn(['data', ...pathArr], fromJS(data))
         : state.deleteIn(['data', ...pathArr])

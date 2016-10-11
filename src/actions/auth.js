@@ -76,7 +76,10 @@ const unWatchUserProfile = (firebase) => {
   const authUid = firebase._.authUid
   const userProfile = firebase._.config.userProfile
   if (firebase._.profileWatch) {
-    firebase.database().ref().child(`${userProfile}/${authUid}`).off('value', firebase._.profileWatch)
+    firebase.database()
+      .ref()
+      .child(`${userProfile}/${authUid}`)
+      .off('value', firebase._.profileWatch)
     firebase._.profileWatch = null
   }
 }
@@ -160,31 +163,29 @@ const getLoginMethodAndParams = ({email, password, provider, type, token, scopes
   }
 }
 
-export const createUserProfile = (dispatch, firebase, userData, profile) => {
+export const createUserProfile = (dispatch, firebase, userData, profile) =>
   // Check for user's profile at userProfile path if provided
-  if (!firebase._.config.userProfile) {
-    return Promise.resolve(userData)
-  }
-  return firebase.database()
+  !firebase._.config.userProfile
+    ? Promise.resolve(userData)
+    : firebase.database()
     .ref()
     .child(`${firebase._.config.userProfile}/${userData.uid}`)
     .once('value')
-    .then(profileSnap => {
+    .then(profileSnap =>
       // Update the profile
-      return profileSnap.ref.update(profile)
+      profileSnap.ref.update(profile)
         .then(() => profile)
         .catch(err => {
           // Error setting profile
           dispatchUnauthorizedError(dispatch, err)
           return Promise.reject(err)
         })
-    })
+    )
     .catch(err => {
       // Error reading user profile
       dispatchUnauthorizedError(dispatch, err)
       return Promise.reject(err)
     })
-}
 
 /**
  * @description Login with errors dispatched
@@ -222,7 +223,7 @@ export const login = (dispatch, firebase, credentials) => {
           extraJWTData
         )
       }
-      console.log('user data:', userData)
+
       // Create profile when logging in with external provider
       const { user } = userData
       return createUserProfile(
