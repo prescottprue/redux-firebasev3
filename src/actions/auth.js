@@ -1,28 +1,15 @@
 import {
-    SET_PROFILE,
-    LOGIN,
-    LOGOUT,
-    LOGIN_ERROR,
-    UNAUTHORIZED_ERROR,
-    AUTHENTICATION_INIT_STARTED,
-    AUTHENTICATION_INIT_FINISHED
+  SET_PROFILE,
+  LOGIN,
+  LOGOUT,
+  LOGIN_ERROR,
+  UNAUTHORIZED_ERROR,
+  AUTHENTICATION_INIT_STARTED,
+  AUTHENTICATION_INIT_FINISHED,
+  defaultJWTKeys
 } from '../constants'
-
-import { Promise } from 'es6-promise'
-
 import { capitalize, omit, isArray, isString } from 'lodash'
 import jwtDecode from 'jwt-decode'
-
-const defaultJWTKeys = [
-  'aud',
-  'auth_time',
-  'exp',
-  'firebase',
-  'iat',
-  'iss',
-  'sub',
-  'user_id'
-]
 
 /**
  * @description Dispatch login error action
@@ -30,10 +17,10 @@ const defaultJWTKeys = [
  * @param {Object} authError - Error object
  */
 const dispatchLoginError = (dispatch, authError) =>
-    dispatch({
-      type: LOGIN_ERROR,
-      authError
-    })
+  dispatch({
+    type: LOGIN_ERROR,
+    authError
+  })
 
 /**
  * @description Dispatch login error action
@@ -41,21 +28,22 @@ const dispatchLoginError = (dispatch, authError) =>
  * @param {Object} authError - Error object
  */
 const dispatchUnauthorizedError = (dispatch, authError) =>
-    dispatch({
-      type: UNAUTHORIZED_ERROR,
-      authError
-    })
+  dispatch({
+    type: UNAUTHORIZED_ERROR,
+    authError
+  })
+
 /**
  * @description Dispatch login action
  * @param {Function} dispatch - Action dispatch function
  * @param {Object} auth - Auth data object
  */
 const dispatchLogin = (dispatch, auth) =>
-    dispatch({
-      type: LOGIN,
-      auth,
-      authError: null
-    })
+  dispatch({
+    type: LOGIN,
+    auth,
+    authError: null
+  })
 
 /**
  * @description Initialize authentication state change listener that
@@ -144,7 +132,6 @@ const getLoginMethodAndParams = ({email, password, provider, type, token, scopes
         params: [ provider, token ]
       }
     }
-    console.debug('auth provider: ', `${capitalize(provider)}AuthProvider`)
     const authProvider = new firebase.auth[`${capitalize(provider)}AuthProvider`]()
     authProvider.addScope('email')
     if (scopes) {
@@ -214,15 +201,11 @@ export const login = (dispatch, firebase, credentials) => {
   dispatchLoginError(dispatch, null)
   let { method, params } = getLoginMethodAndParams(credentials, firebase)
 
-  // Handle multiple methods of sign in with redirect
-  if (method === 'signInWithRedirect') {
-    firebase.auth().signInWithRedirect(...params)
-    method = 'getRedirectResult'
-    params = null
-  }
-
   return firebase.auth()[method](...params)
     .then((userData) => {
+      // Handle null response from getRedirectResult before redirect has happen
+      if (!userData) return Promise.resolve(null)
+
       // For email auth return uid (createUser is used for creating a profile)
       if (userData.email) return userData.uid
 
@@ -239,7 +222,7 @@ export const login = (dispatch, firebase, credentials) => {
           extraJWTData
         )
       }
-
+      console.log('user data:', userData)
       // Create profile when logging in with external provider
       const { user } = userData
       return createUserProfile(
