@@ -1,8 +1,11 @@
 {
-  "presets": ["es2015", "stage-1", "react"],
+  "presets": [
+    "es2015",
+    "stage-1",
+    "react"
+  ],
   "plugins": [
     "es6-promise",
-    "add-module-exports",
     "lodash"
   ]
 }

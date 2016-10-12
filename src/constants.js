@@ -11,6 +11,8 @@ export const defaultJWTKeys = [
   'user_id'
 ]
 
+export const defaultdebounceTime = 200
+
 export const actionTypes = {
   START: `${prefix}START`,
   SET: `${prefix}SET`,
