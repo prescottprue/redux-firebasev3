@@ -214,7 +214,6 @@ export const watchEvent = (firebase, dispatch, event, path, dest, onlyLastEvent 
   }
 
   const runQuery = (q, e, p, params) => {
-
     const handleQueryResponse = (snapshot) => {
       let data = (e === 'child_removed') ? undefined : snapshot.val()
       const resultPath = dest || (e === 'value') ? p : p + '/' + snapshot.key
