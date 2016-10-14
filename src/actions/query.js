@@ -1,9 +1,16 @@
 import {
   SET,
-  NO_VALUE
+  NO_VALUE,
+  defaultdebounceTime
 } from '../constants'
 
-import { map, filter, isString, isObject } from 'lodash'
+import {
+  map,
+  filter,
+  isString,
+  isObject,
+  debounce
+} from 'lodash'
 
 const getWatchPath = (event, path) =>
   event + ':' + ((path.substring(0, 1) === '/') ? '' : '/') + path
@@ -153,26 +160,36 @@ export const watchEvent = (firebase, dispatch, event, path, dest, onlyLastEvent 
           query = query.orderByValue()
           doNotParse = true
           break
+
         case 'orderByPriority':
           query = query.orderByPriority()
           doNotParse = true
           break
+
         case 'orderByKey':
           query = query.orderByKey()
           doNotParse = true
           break
+
         case 'orderByChild':
           query = query.orderByChild(param[1])
           break
+
         case 'limitToFirst':
           query = query.limitToFirst(parseInt(param[1], 10))
           break
+
         case 'limitToLast':
           query = query.limitToLast(parseInt(param[1], 10))
           break
+
         case 'equalTo':
-          let equalToParam = !doNotParse ? parseInt(param[1], 10) || param[1] : param[1]
+          let equalToParam = !doNotParse
+            ? parseInt(param[1], 10) || param[1]
+            : param[1]
+
           equalToParam = equalToParam === 'null' ? null : equalToParam
+
           query = param.length === 3
             ? query.equalTo(equalToParam, param[2])
             : query.equalTo(equalToParam)
@@ -197,7 +214,7 @@ export const watchEvent = (firebase, dispatch, event, path, dest, onlyLastEvent 
   }
 
   const runQuery = (q, e, p, params) => {
-    q.on(e, snapshot => {
+    const handleQueryResponse = (snapshot) => {
       let data = (e === 'child_removed') ? undefined : snapshot.val()
       const resultPath = dest || (e === 'value') ? p : p + '/' + snapshot.key
 
@@ -208,10 +225,11 @@ export const watchEvent = (firebase, dispatch, event, path, dest, onlyLastEvent 
         }
       }
 
-      const populates = filter(params, (param) => params.indexOf('populate'))
-          .map(p => p.split('=')[1])
+      // Get populates from params
+      const populates = filter(params, param => params.indexOf('populate'))
+        .map(p => p.split('=')[1])
 
-      // Dispatch standard if no populates
+      // return dispatch if no populates exist
       if (!populates || !populates.length) {
         return dispatch({
           type: SET,
@@ -233,17 +251,26 @@ export const watchEvent = (firebase, dispatch, event, path, dest, onlyLastEvent 
 
       // Create list of promises (one for each population)
       const promises = map(listToPopulate, (item, key) => {
+        // Item in list does not contain param to be populated
         if (!item[paramToPopulate]) {
           return Object.assign(item, { _key: key })
         }
+
         return !isString(item[paramToPopulate])
             // Parameter to be populated is not an id
-            ? Promise.reject(`Population id is not a string.\n Type: ${typeof item[paramToPopulate]}\n Id: ${JSON.stringify(item[paramToPopulate])}`)
+            ? Promise.reject(
+              ` Population id is not a string.\n
+                Type: ${typeof item[paramToPopulate]}\n
+                Id: ${JSON.stringify(item[paramToPopulate])}
+              `
+            )
+            // Handle population
             : listRef.child(item[paramToPopulate])
                 .once('value')
                 .then(snap =>
                   // Handle population value not existing
                   !snap.val()
+                    // Return item's parameter
                     ? item[paramToPopulate]
                     // Handle population value (object/string)
                     : isObject(snap.val())
@@ -258,7 +285,6 @@ export const watchEvent = (firebase, dispatch, event, path, dest, onlyLastEvent 
                           )
                       // Return value (string, number or bool)
                       : snap.val()
-
                 )
                 .then((populatedList) => {
                   const newItem = item
@@ -267,15 +293,20 @@ export const watchEvent = (firebase, dispatch, event, path, dest, onlyLastEvent 
                 })
       })
 
+      // Dispatch action with result of promises
       Promise.all(promises)
-        .then((list) => {
+        .then(list => {
           dispatch({
             type: SET,
             path: resultPath,
             data: list
           })
         })
-    })
+    }
+
+    // TODO: Enable/disable debounce based on config
+    // TODO: Make debounce time configurable
+    q.on(e, debounce(handleQueryResponse, defaultdebounceTime))
   }
 
   runQuery(query, event, path, queryParams)
@@ -297,7 +328,9 @@ export const unWatchEvent = (firebase, event, path, queryId = undefined) =>
  * @param {Array} events - List of events for which to add watchers
  */
 export const watchEvents = (firebase, dispatch, events) =>
-    events.forEach(event => watchEvent(firebase, dispatch, event.name, event.path))
+    events.forEach(event =>
+      watchEvent(firebase, dispatch, event.name, event.path)
+    )
 
 /**
  * @description Remove watchers from a list of events
